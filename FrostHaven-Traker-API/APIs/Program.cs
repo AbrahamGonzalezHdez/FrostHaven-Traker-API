@@ -1,3 +1,6 @@
+using Application.Registration;
+using Infrastructure.Registration;
+
 namespace APIs;
 
 public class Program
@@ -14,6 +17,10 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
+        
+        //------------Agregamos los servicios configurados en Application y en Infrastructure-----------
+        builder.Services.ApplicationServices(builder.Configuration);
+        builder.Services.InfrastructureServices(builder.Configuration);
 
         var app = builder.Build();
 
