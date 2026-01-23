@@ -1,8 +1,9 @@
 ﻿using Application.Interfaces.Repositories;
-using Infrastructure.Persistence;
+using Application.Interfaces.Security;
 using Infrastructure.Persistence.Contexts;
 using Infrastructure.Postgres;
 using Infrastructure.Repositories;
+using Infrastructure.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,8 @@ public static class AddInfrastructureServices
         //-------Se obtiene la configuracion de la base de datos----------------------
         services.Configure<SqlOptions>(configuration.GetSection("Sql"));
         
+        //-------Repositorios---------------------------------------------------------
+        services.AddScoped<IUserRepository, UserRepository>();
         
         //-------Configuracion de conexion a BD---------------------------------------
         services.AddDbContextPool<SecurityPostgresDbContext>((sp, options) =>
@@ -31,20 +34,19 @@ public static class AddInfrastructureServices
             options.UseNpgsql(sql.ConnectionString, npgsql =>
             {
                 npgsql.CommandTimeout(sql.CommandTimeoutSeconds);
-                // Si tienes migraciones en otro assembly, se especifica aquí:
-                // npgsql.MigrationsAssembly(typeof(AppDbContext).Assembly.FullName);
-                
             });
 
             // Recomendado en prod: evita tracking innecesario por default
             options.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
             
-            
-
             // Solo para debugging en dev (si quieres condicionarlo por env):
             options.EnableSensitiveDataLogging();
             options.EnableDetailedErrors();
         });
+        
+        //-------Security------------------------------------------------------------
+        services.AddScoped<IPasswordHasher, Pbkdf2PasswordHasher>();
+
         
         return services;
     }
