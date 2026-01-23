@@ -17,7 +17,7 @@ public class User
     private readonly List<UserRole> _userRoles = new();
     public IReadOnlyCollection<UserRole> UserRoles => _userRoles.AsReadOnly();
     
-    public User(string email, string name, string surname, string displayName, string password,RoleName role, DateTime createdAt)
+    public User(string email, string name, string surname, string displayName, string password, DateTime createdAt)
     {
         Email = email;
         Name = name;
@@ -36,6 +36,9 @@ public class User
     
     public void AddRole(Role role)
     {
+        if (Id <= 0)
+            throw new InvalidOperationException("No se puede asignar rol a un usuario sin Id. Guarda el usuario primero.");
+
         if (_userRoles.Any(x => x.RoleId == role.Id))
             return;
 
@@ -43,7 +46,8 @@ public class User
     }
     
     public bool HasRole(RoleName roleName) =>
-        _userRoles.Any(ur => ur.Role.Name == roleName);
+        _userRoles.Any(ur => ur.Role.RoleNumber == roleName);
+
     
     public void Deactivate() => Active = false;
 }

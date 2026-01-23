@@ -8,7 +8,6 @@
 ## Get latest from https://github.com/github/gitignore/blob/main/Dotnet.gitignore
 
 # Build results
-.idea/
 [Dd]ebug/
 [Dd]ebugPublic/
 [Rr]elease/
@@ -53,3 +52,13 @@ CodeCoverage/
 *.VisualState.xml
 TestResult.xml
 nunit-*.xml
+
+#Project Migrations
+#FrostHaven-Traker-API/Infrastructure/Persistence/Migrations
+
+# JetBrains IDEs
+.idea/
+*.DotSettings.user
+*.DotSettings
+
+
