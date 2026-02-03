@@ -19,7 +19,7 @@
     env_file:
       - ../.env    
     ports:
-      - "${PGADMIN_PORT}:80"
+      - "5050:80"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     depends_on:
